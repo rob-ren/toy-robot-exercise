@@ -1,64 +1,129 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# Robot Challenge
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+[![Code Climate](https://codeclimate.com/github/RafaelChefe/toy_robot/badges/gpa.svg)](https://codeclimate.com/github/RafaelChefe/toy_robot)
 
-## About Laravel
+## Table of contents:
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+* [Description](./README.md#description)
+  * [Constraints](./README.md#constraints)
+  * [Example Input and Output](./README.md#example-input-and-output)
+  * [Deliverables](./README.md#deliverables)
+* [Setup](./README.md#setup)
+* [Running the app](./README.md#running-the-app)
+* [Running the tests](./README.md#running-the-tests)
+* [Considerations about the development](./README.md#considerations-about-the-development)
+* [Examples of use](./test_data/test_data.txt)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Description
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+* The application is a simulation of a toy robot moving on a square tabletop, of dimensions 5 units x 5 units.
 
-## Learning Laravel
+* There are no other obstructions on the table surface.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+* The robot is free to roam around the surface of the table, but must be prevented from falling to destruction. Any movement that would result in the robot falling from the table must be prevented, however further valid movement commands must still be allowed.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Create an application that can read in commands of the following form:
+```
+PLACE X,Y,F
+MOVE
+LEFT
+RIGHT
+REPORT
+```
 
-## Laravel Sponsors
+* `PLACE` will put the toy robot on the table in position X,Y and facing NORTH, SOUTH, EAST or WEST.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+* The origin (0,0) can be considered to be the SOUTH WEST most corner.
 
-### Premium Partners
+* The first valid command to the robot is a `PLACE` command, after that, any sequence of commands may be issued, in any order, including another `PLACE` command. The application should discard all commands in the sequence until a valid `PLACE` command has been executed
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+* `MOVE` will move the toy robot one unit forward in the direction it is currently facing.
 
-## Contributing
+* `LEFT` and `RIGHT` will rotate the robot 90 degrees in the specified direction without changing the position of the robot.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+* `REPORT` will announce the X,Y and F of the robot. This can be in any form, but standard output is sufficient.
 
-## Code of Conduct
+* A robot that is not on the table can choose to ignore the `MOVE`, `LEFT`, `RIGHT` and `REPORT` commands.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+* Input can be from a file, or from standard input, as the developer chooses.
 
-## Security Vulnerabilities
+* Provide test data to exercise the application.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Constraints
 
-## License
+* The toy robot must not fall off the table during movement. This also includes the initial placement of the toy robot.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+* Any move that would cause the robot to fall must be ignored.
+
+### Example Input and Output:
+
+#### Example a
+
+    PLACE 0,0,NORTH
+    MOVE
+    REPORT
+
+Expected output:
+
+    0,1,NORTH
+
+#### Example b
+
+    PLACE 0,0,NORTH
+    LEFT
+    REPORT
+
+Expected output:
+
+    0,0,WEST
+
+#### Example c
+
+    PLACE 1,2,EAST
+    MOVE
+    MOVE
+    LEFT
+    MOVE
+    REPORT
+
+Expected output
+
+    3,3,NORTH
+    
+## Setup
+
+1. Make sure you have Ruby 2.7.2+ installed in your machine. If you need help installing Ruby, take a look at the [official installation guide](https://www.ruby-lang.org/en/documentation/installation/).
+
+2. Install the [bundler gem](http://bundler.io/) by running:
+
+    ```gem install bundler```
+
+3. Clone this repo:
+
+    ```git clone git@github.com:RafaelChefe/toy_robot.git```
+
+4. Change to the app directory:
+
+    ```cd toy_robot```
+
+5. Install dependencies:
+
+    ```bundle install```
+
+And you're ready to go!
+
+### Running the app:
+```ruby lib/main.rb```
+
+### Running the tests:
+```bundle exec rspec```
+
+### Considerations about the development:
+
+* Since the application is about a robot that receives and executes commands, it made perfect sense to use the [Command Pattern](https://en.wikipedia.org/wiki/Command_pattern) to implement it. It also makes it very easy to add new commands as needed, like a `TELEPORT` command, that would teleport the robot to a random place on the table.
+
+* The table is passed along to the commands when needed, and it's responsible for checking if a position is valid or not. If we need, say, a flying robot that moves in a three-dimensional space instead of a 2D table, it would be easy to implement it.
+
+* The Commander class takes a string, parses it and return the appropriate command. The command string can come from anywhere. As it is, the commands are read from the stdinput, but the same class could be used to read commands from a text file, or from web API.
+
+* Considering using the Decorator Pattern to implement move north, move south, etc.
