@@ -36,4 +36,15 @@ class ToyRobtServiceTest extends TestCase
         $response = $toy_robot->report();
         $this->assertEquals("3,3,NORTH", $response);
     }
+
+    public function testFail()
+    {
+        $toy_robot = new ToyRobotService(10, 10);
+        $toy_robot->place(0, 0, ToyRobotService::FACE_NORTH);
+        $toy_robot->right();
+        $toy_robot->right();
+        $toy_robot->move();
+        $response = $toy_robot->report();
+        $this->assertEquals("0,0,SOUTH", $response);
+    }
 }

@@ -35,28 +35,28 @@ class ToyRobotService
             case self::FACE_NORTH:
                 // check if off the board
                 if ($this->current_position_y == $this->board_y) {
-                    return false;
+                    break;
                 }
                 $this->current_position_y += 1;
                 break;
             case self::FACE_SOUTH:
                 // check if off the board
                 if ($this->current_position_y == 0) {
-                    return false;
+                    break;
                 }
                 $this->current_position_y -= 1;
                 break;
             case self::FACE_EAST:
                 // check if off the board
                 if ($this->current_position_x == $this->board_x) {
-                    return false;
+                    break;
                 }
                 $this->current_position_x += 1;
                 break;
             case self::FACE_WEST:
                 // check if off the board
                 if ($this->current_position_x == 0) {
-                    return false;
+                    break;
                 }
                 $this->current_position_x -= 1;
                 break;
